@@ -1,6 +1,13 @@
 
 <?php
 
+/**
+ * Ugly Jenkins Script
+ * Sorry for poor dokumentation
+ * in the end its the $arrWebHook that matters
+ * this is the correct format :-D
+ */
+
 // Config
 $strPath = '/var/lib/jenkins/jobs/OmegaSix-CommitBuild/builds';
 //$strPath = 'jobs/OmegaSix-CommitBuild/builds';

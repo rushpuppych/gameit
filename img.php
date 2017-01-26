@@ -31,6 +31,9 @@ $arrScreenArray = generateClearScreenArray();
 $arrPlayerStatus = getPlayerScreenStatus($strShowPlayer);
 $arrPlayerData = $arrPlayerStatus['player'];
 
+// WebHook Integration
+$arrPlayerStatus = questImportData($arrPlayerStatus);
+
 // Char is Idle in City
 if($arrPlayerStatus['status'] == "idle") {
     // Player Screen Laden

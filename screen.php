@@ -29,6 +29,9 @@ if($strLoginPlayer == 'anonym') {
 $arrPlayerStatus = getPlayerScreenStatus($strShowPlayer);
 $arrPlayerData = $arrPlayerStatus['player'];
 
+// WebHook Integration
+$arrPlayerStatus = questImportData($arrPlayerStatus);
+
 // Char is Idle in City
 if($arrPlayerStatus['status'] == "idle") {
     echo '<span style="float: left">';
@@ -37,9 +40,6 @@ if($arrPlayerStatus['status'] == "idle") {
     echo imgStringToHtmlImg(createPlayerMinimalStats($arrPlayerData, $arrConfig)) . '<br>';
     echo "</span>";
 }
-
-// WebHook
-$arrPlayerStatus = questImportData($arrPlayerStatus);
 
 // Char is Questing
 if($arrPlayerStatus['status'] == "quest") {

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This is the Importer File For Jenkins CI
+ * Todo: Please change the IP of your Jenkins Server
+ * @param $arrPlayerStatus
+ * @return mixed
+ */
 function questImportData($arrPlayerStatus)
 {
     // Questing Percent Calculation
