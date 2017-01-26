@@ -1,0 +1,128 @@
+[
+  {
+    "from_level": 1,
+    "to_level": 4,
+    "ranking_male": "Blutiger Anfänger",
+    "ranking_female": "Blutige Anfängerin"
+  },
+  {
+    "from_level": 5,
+    "to_level": 9,
+    "ranking_male": "Horn Brillenträger",
+    "ranking_female": "Horn Brillenträgerin"
+  },
+  {
+    "from_level": 10,
+    "to_level": 14,
+    "ranking_male": "Web Anwender",
+    "ranking_female": "Web Anwenderin"
+  },
+  {
+    "from_level": 10,
+    "to_level": 14,
+    "ranking_male": "Script Kiddie",
+    "ranking_female": "Script Kiddie"
+  },
+  {
+    "from_level": 15,
+    "to_level": 19,
+    "ranking_male": "Pampers Coder",
+    "ranking_female": "Pamers Coderin"
+  },
+  {
+    "from_level": 20,
+    "to_level": 24,
+    "ranking_male": "Web Designer",
+    "ranking_female": "Web Designer"
+  },
+  {
+    "from_level": 25,
+    "to_level": 29,
+    "ranking_male": "Junior Developer",
+    "ranking_female": "Junior Developerin"
+  },
+  {
+    "from_level": 30,
+    "to_level": 34,
+    "ranking_male": "Service Coder",
+    "ranking_female": "Service Coderin"
+  },
+  {
+    "from_level": 35,
+    "to_level": 39,
+    "ranking_male": "Web Developer",
+    "ranking_female": "Web Developer"
+  },
+  {
+    "from_level": 40,
+    "to_level": 44,
+    "ranking_male": "Web Warrior",
+    "ranking_female": "Web Warrior"
+  },
+  {
+    "from_level": 45,
+    "to_level": 49,
+    "ranking_male": "PHP Hacker",
+    "ranking_female": "PHP Hackerin"
+  },
+  {
+    "from_level": 50,
+    "to_level": 54,
+    "ranking_male": "SemiPro WebDev",
+    "ranking_female": "SemiPro WebDev"
+  },
+  {
+    "from_level": 55,
+    "to_level": 59,
+    "ranking_male": "King Coder",
+    "ranking_female": "Queen Coderin"
+  },
+  {
+    "from_level": 60,
+    "to_level": 64,
+    "ranking_male": "Pro Entwickler",
+    "ranking_female": "Pro Entwicklerin"
+  },
+  {
+    "from_level": 65,
+    "to_level": 69,
+    "ranking_male": "DER GURU",
+    "ranking_female": "DER GURU"
+  },
+  {
+    "from_level": 70,
+    "to_level": 74,
+    "ranking_male": "Top 100 Web Dev",
+    "ranking_female": "Top 100 Web Dev"
+  },
+  {
+    "from_level": 75,
+    "to_level": 79,
+    "ranking_male": "Top 50 Web Dev",
+    "ranking_female": "Top 50 Web Dev"
+  },
+  {
+    "from_level": 80,
+    "to_level": 84,
+    "ranking_male": "Top 10 Web Dev",
+    "ranking_female": "Top 10 Web Dev"
+  },
+  {
+    "from_level": 85,
+    "to_level": 89,
+    "ranking_male": "Top 3 Web Dev",
+    "ranking_female": "Top 3 Web Dev"
+  },
+  {
+    "from_level": 90,
+    "to_level": 94,
+    "ranking_male": "CHIEF EXECUTIVE WEBDEV",
+    "ranking_female": "CHIEF EXECUTIVE WEBDEV"
+  },
+  {
+    "from_level": 95,
+    "to_level": 1000,
+    "ranking_male": "GOD DEVELOPER OF UNIVERSE",
+    "ranking_female": "GOD DEVELOPER OF UNIVERSE"
+  }
+]

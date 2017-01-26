@@ -1,0 +1,12 @@
+{
+   "resources":[
+      {
+		 "resource_id":"2eeb8c2a-dc92-11e6-bf26-cec0c932ce01",
+         "type":"helmet",
+         "file":"001",
+         "race":"*",
+         "ethnicity":"*",
+         "gender":"*"
+      }
+   ]
+}

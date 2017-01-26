@@ -1,0 +1,1 @@
+handle clicks and triggers generators

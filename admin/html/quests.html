@@ -1,0 +1,41 @@
+<h1>Quests</h1>
+<p>Generate a new Quest Card</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <form action="?" method="get" enctype="text/plain" >
+            <input type="hidden" name="page" value="php/quests.php">
+            <div class="form-group">
+                <label for="quest_name">Quest Name</label>
+                <input type="text" class="form-control" name="quest_name" id="quest_name" placeholder="Let this empty for auto generation">
+            </div>
+            <div class="form-group">
+                <label for="quest_gold">Gold</label>
+                <input type="number" class="form-control" name="quest_gold" id="quest_gold" placeholder="Level Percent (1-5)">
+            </div>
+            <div class="form-group">
+                <label for="quest_exp">Experience</label>
+                <input type="number" class="form-control" name="quest_exp" id="quest_exp" placeholder="Level Percent (5-10)">
+            </div>
+            <div class="form-group">
+                <label for="quest_place">Place</label>
+                <select class="form-control" name="quest_place" id="quest_place">
+                    <option value="002">Grüne Wiese</option>
+                    <option value="003">Scary Wald</option>
+                    <option value="004">Höhle</option>
+                    <option value="005">Castle</option>
+                    <option value="006">Minen Schacht</option>
+                    <option value="007">Ruine</option>
+                    <option value="008">Burg keller</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quest_items">Items</label>
+                <input type="number" class="form-control" name="quest_items" id="quest_items" placeholder="ca. 1-10">
+            </div>
+            <button type="submit" class="btn btn-success">Generate Quest</button>
+        </form>
+    </div>
+</div>
+
+

@@ -1,0 +1,28 @@
+{
+	"places": [
+		{
+			"place_id": "uuid",
+			"bg_default": "001",
+			"name": "Vampire Castle",
+			"level-00": {
+				"rooms": [
+					{"name": "Vorhof", "bg": "001"},
+					{"name": "Terasse", "bg": "002"},
+					{"name": "Innenhof", "bg": "003"},
+				],
+				"enemys": [
+					{"enemy_id": "001", "enemy_type": "boss|elite|normal"}
+				]
+			}
+			"level-10": {},
+			"level-20": {},
+			"level-30": {},
+			"level-40": {},
+			"level-50": {},
+			"level-60": {},
+			"level-70": {},
+			"level-80": {},
+			"level-90": {},
+		}
+	]
+}

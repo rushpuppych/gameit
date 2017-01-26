@@ -1,0 +1,8 @@
+{
+  "base_url": "http://localhost:8888/gi/",
+  "alpha_color": "32:156:0",
+  "exp_factor": 1.8,
+  "exp_base": 100,
+  "no_fight_message_title": "Warte auf BitBucket Checkin",
+  "no_quest_message_title": "Keine Quest am laufen"
+}
