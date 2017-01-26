@@ -7,6 +7,7 @@
 // Include
 include_once("assets/lib/GifCreator.php");
 include_once("assets/lib/global_functions.php");
+include_once("interface/jenkins_import.php");
 
 // Cookie Informationen auslesen
 $strLoginPlayer = getCookie('player', 'anonym');
