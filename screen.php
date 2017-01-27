@@ -27,10 +27,12 @@ if($strLoginPlayer == 'anonym') {
 
 // Player Status ermitteln
 $arrPlayerStatus = getPlayerScreenStatus($strShowPlayer);
+$arrPlayerStatus = questImportData($arrPlayerStatus);
 $arrPlayerData = $arrPlayerStatus['player'];
 
-// WebHook Integration
-$arrPlayerStatus = questImportData($arrPlayerStatus);
+// Include Javascript and CSS
+echo '<script src="./assets/js/opentip-native.min.js"></script>';
+echo '<link href="./assets/js/opentip.css" rel="stylesheet" type="text/css" />';
 
 // Char is Idle in City
 if($arrPlayerStatus['status'] == "idle") {
@@ -123,18 +125,27 @@ if($strScreen == 'stats') {
 // Fight Screen
 if($strScreen == 'fight' && $strShowPlayer == $strLoginPlayer) {
     $arrFight = $arrPlayerStatus['player_quest']['fight'];
-    echo imgStringToHtmlImg(createScreenFight($arrFight, $arrConfig, $arrPlayerStatus['status']), 'style="margin-top:-2px;"') . '<br>&nbsp;';
-    if($arrFight['progress'] > 0) {
-        echo imgStringToHtmlImg(createBtn('Attack', '1', false), 'style="position: absolute; top: 274px; left: 280px;"');
-        echo imgStringToHtmlImg(createBtn('Show Repport', '4', false), 'style="position: absolute; top: 274px; left: 378px;"');
+    echo imgStringToHtmlImg(createScreenFight($arrFight, $arrConfig, $arrPlayerStatus['status'], $arrPlayerStatus['player_quest']), 'style="margin-top:-2px;"') . '<br>&nbsp;';
+    if($arrFight['progress'] > 0 && $arrPlayerStatus['player_quest']['progress'] == 100) {
+        echo imgStringToHtmlImg(createBtn('Quit', '1', false), 'style="position: absolute; top: 274px; left: 280px;"');
+        echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 274px; left: 378px;">';
+        echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
+        echo '</a>';
         echo '<div style="position: absolute; top: 104px; left: 280px; width:110px; height: 160px; border: 2px solid #ffffff; background-color: #04B404; opacity: 0.5;"></div>';
         echo '<div style="position: absolute; top: 104px; left: 280px; width:110px; height: 160px; overflow: auto; border: 2px solid #ffffff;">';
+        echo getQuestRewards($arrPlayerStatus, true);
         echo '</div>';
 
         echo '<div style="position: absolute; top: 104px; left: 405px; width:110px; height: 160px; border: 2px solid #ffffff; background-color: #DF0101; opacity: 0.5 "></div>';
         echo '<div style="position: absolute; top: 104px; left: 405px; width:110px; height: 160px; overflow: auto; border: 2px solid #ffffff;">';
+        echo getQuestRewards($arrPlayerStatus, false);
         echo '</div>';
+    } else {
+        echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 174px; left: 330px;">';
+        echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
+        echo '</a>';
     }
+
 }
 
 // Shop Screen

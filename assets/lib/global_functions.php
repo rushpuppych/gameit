@@ -237,7 +237,7 @@ function imgCreateAnimation($objCharacter, $objBackground, $arrFrames, $arrDurat
  * @param $numB
  * @return \GifCreator\AnimGif
  */
-function imgCreateFightAnimation($objCharacter, $objEnemy, $objBackground, $arrFramesChar, $arrFramesEnemy, $arrDurationTimes, $numR, $numG, $numB)
+function imgCreateFightAnimation($objCharacter, $objEnemy, $objBackground, $arrFramesChar, $arrFramesEnemy, $arrDurationTimes, $numR, $numG, $numB, $numProgress)
 {
     // Create Temporary Background Images
     $arrTempFiles = [];
@@ -248,10 +248,16 @@ function imgCreateFightAnimation($objCharacter, $objEnemy, $objBackground, $arrF
         if($boolMarchIn) { $numMarch++; } else { $numMarch--; }
         if($numMarch > 4 and $boolMarchIn == true) { $boolMarchIn = false; }
         if($numMarch < 1 and $boolMarchIn == false) { $boolMarchIn = true; }
-
+        $numEnemyMarch = $numMarch;
         $objWorkBg = imgCloneResource($objBackground);
         $objCharFrame = imgCreateFrame($objCharacter, $numFrameChar, $numR, $numG, $numB);
-        $objEnemyFrame = imgCreateFrame($objEnemy, $arrFramesEnemy[$numIndex], $numR, $numG, $numB);
+        if($numProgress < 100) {
+            $objEnemyFrame = imgCreateFrame($objEnemy, $arrFramesEnemy[$numIndex], $numR, $numG, $numB);
+        } else {
+            $numEnemyMarch = 0;
+            $arrFramesEnemy = [1, 4, 7, 10, 1, 4, 7, 10];
+            $objEnemyFrame = imgCreateFrame($objEnemy, $arrFramesEnemy[$numIndex], $numR, $numG, $numB);
+        }
 
         // Create new Player Enemy image
         $numWidth = imagesx($objWorkBg);
@@ -263,7 +269,7 @@ function imgCreateFightAnimation($objCharacter, $objEnemy, $objBackground, $arrF
         $numWidthChar = imagesx($objCharFrame);
         $numHeightChar = imagesy($objCharFrame);
         imagecopymerge($objMergeImage, $objCharFrame, 20 + ($numMarch * 5), $numHeight / 2 - 50, 0, 0, $numWidthChar, $numHeightChar, 100);
-        imagecopymerge($objMergeImage, $objEnemyFrame, 165 - ($numMarch * 5), $numHeight / 2 - 50, 0, 0, $numWidthChar, $numHeightChar, 100);
+        imagecopymerge($objMergeImage, $objEnemyFrame, 165 - ($numEnemyMarch * 5), $numHeight / 2 - 50, 0, 0, $numWidthChar, $numHeightChar, 100);
         imgSetAlpha($objMergeImage, $numR, $numG, $numB);
 
         $objFrame = imgAddBackground($objWorkBg, $objMergeImage);
@@ -645,12 +651,8 @@ function createScreenCharacterFight($arrPlayerData, $strBackground, $numR, $numG
     $objBackground = imgAddProgressBar($objBackground, 30, 100 - $arrFight['progress'], 140, 250, 3);
     $objBackground = imgAddTitle($objBackground, 44, 150, 100 - $arrFight['progress'] . ' %', 1);
 
-    // Title
-    //$objBackground = imgAddProgressBar($objBackground, 160, 0);
-    //$objBackground = imgAddTitle($objBackground, 174, 17, $strTitle, 1);
-
     // Create Animation
-    $objAnimatedGif = imgCreateFightAnimation($objCharacter, $objEnemy, $objBackground, [4, 3, 4, 5, 4, 3, 4, 5], [10, 9, 10, 11, 10, 9, 10, 11], [20, 30, 20, 30, 20, 30, 20, 30], $numR, $numG, $numB);
+    $objAnimatedGif = imgCreateFightAnimation($objCharacter, $objEnemy, $objBackground, [4, 3, 4, 5, 4, 3, 4, 5], [10, 9, 10, 11, 10, 9, 10, 11], [20, 30, 20, 30, 20, 30, 20, 30], $numR, $numG, $numB , $arrFight['progress']);
 
     // Save Animation
     $strAnimatedGif = $objAnimatedGif->get();
@@ -895,7 +897,7 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
  * @return string
  * @internal param $arrPlayerData
  */
-function createScreenFight($arrFight, $arrConfig, $strStatus)
+function createScreenFight($arrFight, $arrConfig, $strStatus, $arrQuest)
 {
     // Image Background
     $strBackgroundPath = './assets/img/misc/quest.jpg';
@@ -903,24 +905,23 @@ function createScreenFight($arrFight, $arrConfig, $strStatus)
     $objImg = imagecrop($objImg, ['x' => 600, 'y' => 400, 'width' => 259, 'height' => 239]);
 
     if($arrFight['progress'] == 0) {
-        if($strStatus != 'idle') {
-            $objImg = imgAddProgressBar($objImg, 100, 0, 10, 245, 2);
-            $objImg = imgAddTitle($objImg, 115, 20, $arrConfig['no_fight_message_title'], 1);
-        } else {
+        if($strStatus == 'idle') {
             $objImg = imgAddProgressBar($objImg, 100, 0, 10, 245, 2);
             $objImg = imgAddTitle($objImg, 115, 20, $arrConfig['no_quest_message_title'], 1);
         }
 
     } else {
-        // You and Enemy label
-        $objImg = imgAddProgressBar($objImg, 11, 0, 10, 122, 2);
-        $objImg = imgAddTitle($objImg, 25, 20, 'YOU WINS', 1);
+        if($arrQuest['progress'] == 100) {
+            // You and Enemy label
+            $objImg = imgAddProgressBar($objImg, 11, 0, 10, 122, 2);
+            $objImg = imgAddTitle($objImg, 25, 20, 'YOU WINS', 1);
 
-        $arrEnemyData = getEnemyData($arrFight['enemy_id']);
-        $strEnemyName = ucfirst($arrEnemyData['name']);
+            $arrEnemyData = getEnemyData($arrFight['enemy_id']);
+            $strEnemyName = ucfirst($arrEnemyData['name']);
 
-        $objImg = imgAddProgressBar($objImg, 11, 0, 134, 247, 2);
-        $objImg = imgAddTitle($objImg, 25, 144, $strEnemyName, 1);
+            $objImg = imgAddProgressBar($objImg, 11, 0, 134, 247, 2);
+            $objImg = imgAddTitle($objImg, 25, 144, $strEnemyName, 1);
+        }
     }
 
 
@@ -1278,6 +1279,167 @@ function imgCloneResource($objImg)
     //Create the Clone!!
     imagecopy($objClone, $objImg, 0, 0, 0, 0, $numWidth, $numHeight);
     return $objClone;
+}
+
+/**
+ * Gibt den Item Array zurück der angibt wie viel gewinn mann mit einem Quest machen kann.
+ * @param $arrPlayerStatus
+ * @param $isPlayer
+ * @return array
+ */
+function getQuestRewards($arrPlayerStatus, $boolIsPlayer)
+{
+    // Get Player Level
+    $numLevel = getPlayerLevel($arrPlayerStatus['player']['attributes']['exp'], getAppConfig())['level'];
+
+    // Get The Players and Enemy Percent
+    $numPercent = $arrPlayerStatus['player_quest']['fight']['progress'];
+
+    // Split Gold and Experience
+    $numGold = ($arrPlayerStatus['quest_data']['gold'] * $numLevel) / 100 * $numPercent;
+    $numExp = ($arrPlayerStatus['quest_data']['exp'] * $numLevel) / 100 * $numPercent;
+    if(!$boolIsPlayer) {
+        $numGold = ($arrPlayerStatus['quest_data']['gold'] * $numLevel) - $numGold;
+        $numExp =  ($arrPlayerStatus['quest_data']['exp'] * $numLevel) - $numExp;
+    }
+
+    // Generate Info Array
+    $arrInformation = [];
+    $arrInformation[] = ['img' => '', 'value' => $numGold, 'data' => 'gold'];
+    $arrInformation[] = ['img' => '', 'value' => $numExp, 'data' => 'exp'];
+
+    // Get all the Reward Items
+    foreach($arrPlayerStatus['quest_data']['rewards'] as $arrReward) {
+        if($boolIsPlayer) {
+            if($arrReward['percent'] <= $numPercent) {
+                $strFile = 'assets/img/' . $arrReward['type'] . '/' . $arrReward['img_src'] . '.png';
+                $arrInformation[] = ['img' => $strFile, 'value' => $arrReward['type'], 'data' => $arrReward['name']];
+            }
+        } else {
+            if($arrReward['percent'] > $numPercent) {
+                $strFile = 'assets/img/' . $arrReward['type'] . '/' . $arrReward['img_src'] . '.png';
+                $arrInformation[] = ['img' => $strFile, 'value' => $arrReward['type'], 'data' => $arrReward['name']];
+            }
+        }
+    }
+
+    // Generate HTML Output
+    $strHtml = '';
+    foreach($arrInformation as $arrRecord) {
+        $strToolTip = $arrRecord['data'];
+        if($arrRecord['data'] == 'gold' || $arrRecord['data'] == 'exp') {
+            $strToolTip = ucfirst($arrRecord['data']) . ': ' . round($arrRecord['value'], 0);
+        }
+        $strHtml .= '<div style="font-family: arial; margin: 10px; margin-left: 15px;" class="reward" data-ot="' . $strToolTip . '">';
+        $strHtml .= imgStringToHtmlImg(getRewardImage($arrRecord['img'], $arrRecord['value'], $arrRecord['data']));
+        $strHtml .= '</div>';
+    }
+
+    return $strHtml;
+}
+
+/**
+ * Generates The Reward image for the Screen
+ * @param $strImagePath
+ * @param $strType
+ * @param $strData
+ * @return string
+ */
+function getRewardImage($strImagePath, $strType, $strData)
+{
+    $arrItem = getItemPositionCorrection($strType);
+    $strBackgroundPath = './assets/img/misc/equip.jpg';
+    $objImg = imagecreatefromjpeg($strBackgroundPath);
+    $objImg = imagecrop($objImg, ['x' => 40, 'y' => 100, 'width' => 71, 'height' => 96]);
+
+    if($strImagePath != '') {
+        $objItem = imagecreatefrompng($strImagePath);
+        $objItem = imgCreateFrame($objItem, $arrItem['frame'], 32, 156, 0);
+        $objItem = imgSetAlpha($objItem, 32, 156, 0);
+        $objImg = imgMergeImages($objImg, $objItem, $arrItem['y'], $arrItem['x']);
+    } else {
+        // Font Farbe
+        $objColor = getColorByCode(1, $objImg);
+
+        // Text
+        if($strData == 'gold') {
+            $numValue = sprintf("%' 5d\n", round($strType, 0));
+            imagettftext($objImg, 16, 0, 5, 60, $objColor, "./assets/font/Gamer.ttf", $numValue);
+            $strType = 'Gold';
+        }
+        if($strData == 'exp') {
+            $numValue = sprintf("%' 5d\n", round($strType, 0));
+            imagettftext($objImg, 16, 0, 5, 60, $objColor, "./assets/font/Gamer.ttf", $numValue);
+            $strType = 'EXP';
+        }
+
+    }
+
+    // Add Title
+    if(!empty($arrItem)) {
+        $strType = $arrItem['text'];
+    }
+    $objImg = imgAddProgressBar($objImg, 0, 0, 0, 70);
+    $objImg = imgAddTitle($objImg, 15, 5, $strType, 1);
+    $strImage = imgResourceToString($objImg);
+
+    return $strImage;
+}
+
+/**
+ * Gibt die Item Korrektur Position an
+ * @param $strType
+ * @return array
+ */
+function getItemPositionCorrection($strType)
+{
+    $arrCorrection = [];
+    switch($strType) {
+        case 'armor':
+            $arrCorrection['x'] = 0;
+            $arrCorrection['y'] = 0;
+            $arrCorrection['text'] = 'Rüstung';
+            $arrCorrection['frame'] = 7;
+            break;
+        case 'boots':
+            $arrCorrection['x'] = 0;
+            $arrCorrection['y'] = 0;
+            $arrCorrection['text'] = 'Stiefel';
+            $arrCorrection['frame'] = 0;
+            break;
+        case 'weapon':
+            $arrCorrection['x'] = 18;
+            $arrCorrection['y'] = 0;
+            $arrCorrection['text'] = 'Waffe';
+            $arrCorrection['frame'] = 7;
+            break;
+        case 'shield':
+            $arrCorrection['x'] = -15;
+            $arrCorrection['y'] = -10;
+            $arrCorrection['text'] = 'Schild';
+            $arrCorrection['frame'] = 7;
+            break;
+        case 'helmet':
+            $arrCorrection['x'] = 0;
+            $arrCorrection['y'] = 10;
+            $arrCorrection['text'] = 'Helm';
+            $arrCorrection['frame'] = 7;
+            break;
+        case 'ring':
+            $arrCorrection['x'] = 0;
+            $arrCorrection['y'] = 0;
+            $arrCorrection['text'] = 'Ring';
+            $arrCorrection['frame'] = 0;
+            break;
+        case 'amulet':
+            $arrCorrection['x'] = 0;
+            $arrCorrection['y'] = 0;
+            $arrCorrection['text'] = 'Amulett';
+            $arrCorrection['frame'] = 0;
+            break;
+    }
+
+    return $arrCorrection;
 }
 
 /**

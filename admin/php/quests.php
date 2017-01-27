@@ -29,10 +29,11 @@ $arrQuest['enemy_id'] = getRandomEnemy();
 $numPercentSteps = intval(100 / intval($strItems));
 for($numIndex = 0; $numIndex < intval($strItems); $numIndex++) {
     $arrItem = [];
-    $arrItem['percent'] = $numIndex * $numPercentSteps;
+    $arrItem['percent'] = round(($numIndex + 1) * $numPercentSteps, 2);
     $arrItem['type'] = getRandomItemTypes();
     $arrItem['name'] = generateItemName($arrItem['type']);
     $arrItem['img_src'] = getRandomImg($arrItem['type']);
+    $arrQuest['rewards'][] = $arrItem;
 }
 
 $strFile = file_get_contents('../data/quests.json', true);
@@ -69,13 +70,14 @@ echo '</div>';
 function getRandomItemTypes()
 {
     $numType = rand(0, 6);
+    $numType = rand(0, 3);
     $arrTypes[] = 'helmet';
-    $arrTypes[] = 'boots';
+    //$arrTypes[] = 'boots';
     $arrTypes[] = 'shield';
     $arrTypes[] = 'armor';
     $arrTypes[] = 'weapon';
-    $arrTypes[] = 'ring';
-    $arrTypes[] = 'amulet';
+    //$arrTypes[] = 'ring';
+    //$arrTypes[] = 'amulet';
     return $arrTypes[$numType];
 }
 
@@ -97,6 +99,9 @@ function getRandomImg($strType)
     $numItem = rand(2, count($arrFiles) -1);
     $strItem = $arrFiles[$numItem];
     $strItem = str_replace('.png', '', $strItem);
+    if(!is_numeric($strItem)) {
+        $strItem = getRandomImg($strType);
+    }
     return $strItem;
 }
 
@@ -106,6 +111,7 @@ function getRandomEnemy()
     $arrFile = json_decode($strFile, true);
     $numIndex = rand(0, count($arrFile) -1);
     $strEnemyId = $arrFile[$numIndex]['id'];
+
     return $strEnemyId;
 }
 

@@ -30,7 +30,7 @@ function questImportData($arrPlayerStatus)
             $boolFight = true;
         } else {
             $arrPlayerStatus['player_quest']['status'] = "running";
-            $arrPlayerStatus['player_quest']['progress'] = $numPercent;
+            $arrPlayerStatus['player_quest']['progress'] = round($numPercent, 2);
             $boolFight = false;
         }
 
@@ -38,7 +38,7 @@ function questImportData($arrPlayerStatus)
         if($boolFight) {
             $numFightTotal = $arrImport['total_fight_data'];
             $numPercent = 100 - (100 / $numFightTotal * count($arrImport['fight_data']));
-            $arrPlayerStatus['player_quest']['fight']['progress'] = $numPercent;
+            $arrPlayerStatus['player_quest']['fight']['progress'] = round($numPercent, 2);
             $arrPlayerStatus['player_quest']['fight']['action'] = 'Versuch: ' . $arrImport['checkin_counter'];
         }
 
@@ -57,8 +57,13 @@ function questImportData($arrPlayerStatus)
         }
 
         // Save Player Data
-        $strData = json_encode($arrData);
-        $strData = file_put_contents("./data/player.json", $strData);
+        $strEncode = json_encode($arrData);
+        if($strEncode != false) {
+            $boolSave = file_put_contents("./data/player.json", $strEncode);
+            if(!$boolSave) {
+                file_put_contents("./data/player.json", $strData);
+            }
+        }
 
     }
 

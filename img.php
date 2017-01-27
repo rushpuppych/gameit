@@ -30,10 +30,8 @@ $arrScreenArray = generateClearScreenArray();
 
 // Player Status ermitteln
 $arrPlayerStatus = getPlayerScreenStatus($strShowPlayer);
-$arrPlayerData = $arrPlayerStatus['player'];
-
-// WebHook Integration
 $arrPlayerStatus = questImportData($arrPlayerStatus);
+$arrPlayerData = $arrPlayerStatus['player'];
 
 // Char is Idle in City
 if($arrPlayerStatus['status'] == "idle") {

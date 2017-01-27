@@ -27,7 +27,7 @@ $strPath .= '/' . $numCommit;
 echo "[game] Generate File Names \n";
 $strDirRepport = '/';
 $strFileChangelog = $strPath . '/changelog.xml';
-$strFileCheckStyle = $strPath . '/checkstyle-warnings-fixed.xml';
+$strFileCheckStyle = $strPath . '/checkstyle-warnings.xml';
 $strFilePhpUnit = $strPath . '/junitResult.xml';
 
 // Git Change Log auslesen
@@ -114,8 +114,7 @@ foreach($objXml->suites[0]->suite[0]->cases as $objCases) {
         $numQuestTotal++;
     }
 }
-echo "[game] PHPUnit Error: " . $numQuestError . "\n";
-echo "[game] PHPUnit Success: " . $numQuestSuccess . "\n";
+echo "[game] PHPUnit Total: " . $numQuestTotal . "\n";
 
 // Check Style Repport auslesen aus dem Ordner voilations file
 // Nur die die auch im Release sind
@@ -124,24 +123,17 @@ $strXmlData = file_get_contents($strFileCheckStyle);
 $objXml = new SimpleXMLElement($strXmlData);
 foreach($objXml as $objRecord) {
     $strFilePath = str_replace('/var/lib/jenkins/workspace/OmegaSix-CommitBuild/', '', $objRecord->fileName);
-    $strMessage = (string) $objRecord->message;
-    $arrCheckin = [];
-    $numBefore = count($arrFightData) - 1;
-
-    if(empty($strFilePath)) {
-        $strFilePath = $arrFightData[$numBefore]['file'];
+    if(!empty($strFilePath)) {
+        $strMessage = (string)$objRecord->message;
+        $arrCheckin = [];
+        $arrCheckin['title'] = 'CheckStyle: ' . $objRecord->type . ' - ' . $objRecord->category;
+        $arrCheckin['file'] = $strFilePath;
+        $arrCheckin['message'][] = $strMessage;
+        $arrCheckin['message'][] = $strFilePath . ':' . $objRecord->primaryLineNumber;
+        echo "[game] Found CheckStyle Warning: " . 'Bug: (' . $objRecord->type . ' - ' . $objRecord->category . ')' . "\n";
+        $arrJsonData[] = $arrCheckin;
+        $arrFightData[] = $arrCheckin;
     }
-    if(empty($strMessage)) {
-        $strMessage = $arrFightData[$numBefore]['message'][0];
-    }
-
-    $arrCheckin['title'] = 'CheckStyle: ' . $objRecord->type . ' - ' . $objRecord->category;
-    $arrCheckin['file'] = $strFilePath;
-    $arrCheckin['message'][] = $strMessage;
-    $arrCheckin['message'][] = $strFilePath . ':' . $objRecord->primaryLineNumber;
-    echo "[game] Found CheckStyle Warning: " . 'Bug: (' . $objRecord->type . ' - ' . $objRecord->category . ')' . "\n";
-    $arrJsonData[] = $arrCheckin;
-    $arrFightData[] = $arrCheckin;
 }
 
 // Read Last File and addQuest Files
@@ -151,7 +143,7 @@ if(file_exists($strSaveFile)) {
     $strLogData = file_get_contents($strSaveFile);
     $arrLastFile = json_decode($strLogData, true);
     $numCheckin = $arrLastFile['checkin_counter'] + 1;
-    $numMaxFight = $arrLastFile['max_fight_data'];
+    $numMaxFight = $arrLastFile['total_fight_data'];
     if(empty($arrLastFile['quest_files'])) {
         $arrQuestFiles = $arrChangedFiles;
     } else {
