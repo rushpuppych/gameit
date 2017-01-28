@@ -40,8 +40,15 @@ $strFile = file_get_contents('../data/quests.json', true);
 $arrFile = json_decode($strFile);
 $arrFile[] = $arrQuest;
 
-$strFile = json_encode($arrFile);
-file_put_contents('../data/quests.json', $strFile);
+// Save Player Data
+$strEncode = json_encode($arrFile);
+if($strEncode != false) {
+    $boolSave = file_put_contents('../data/quests.json', $strEncode);
+    if(!$boolSave) {
+        file_put_contents('../data/quests.json', $strFile);
+    }
+}
+
 
 // Echo Quest
 echo "<h1>Quests</h1>";
@@ -53,9 +60,9 @@ echo '        <form>';
 echo '            <div class="form-group">';
 echo '                <label for="quest_code">MarkDown Quest Code</label>';
 echo '                <textarea class="form-control" id="quest_code" name="quest_code">';
-echo "Checkin Id: #" . $strUid . "\n";
-echo "![](http://localhost:8888/gi/img.php?img=0-0&quest=" . $strUid . ")";
-echo "[![](http://localhost:8888/gi/img.php?img=1-0&quest=" . $strUid . ")](http://localhost:8888/gi/quest.php?src=ext&quest=" . $strUid . ") ";
+echo "** Checkin Id: ** #" . $strUid . "\n";
+echo "![](http://localhost:8888/gi/img.php?img=0-0&quest=" . $strUid . ")\n";
+echo "[![](http://localhost:8888/gi/img.php?img=1-0&quest=" . $strUid . ")](http://localhost:8888/gi/quest.php?src=ext&quest=" . $strUid . ")\n";
 echo '                </textarea>';
 echo '            </div>';
 echo '        </form>';

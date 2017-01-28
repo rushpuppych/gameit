@@ -29,6 +29,33 @@ function getPlayerData($numPlayerId = '000')
 }
 
 /**
+ * Speichert einen Player ab
+ * @param $arrPlayerData
+ */
+function savePlayerData($arrPlayerData)
+{
+    $numPlayerId = $arrPlayerData['id'];
+
+    // Player aktualisieren
+    $arrAllPlayer = getPlayerData();
+    foreach($arrAllPlayer as $numIndex => $arrRecord) {
+        if($arrRecord['id'] == $numPlayerId) {
+            $arrAllPlayer[$numIndex] = $arrPlayerData;
+        }
+    }
+
+    // Save Player
+    $strDataSave = json_encode($arrAllPlayer);
+    if($strDataSave != false) {
+        $boolSave = file_put_contents("./data/player.json", $strDataSave);
+        if(!$boolSave) {
+            $strRecovery = json_encode($arrAllPlayer);
+            file_put_contents("./data/player.json", $strRecovery);
+        }
+    }
+}
+
+/**
  * Loading Quest Array
  * @param string $numQuestId
  * @return mixed
@@ -519,7 +546,7 @@ function imgCreateCharacter($arrPlayerData, $numR, $numG, $numB)
 
     // Get Armor OPTIONAL
     if(!empty($arrPlayerData['equipment']['armor'])) {
-        $strArmorPath = './assets/img/armor/' . $arrPlayerData['equipment']['armor'] . '.png';
+        $strArmorPath = './assets/img/armor/' . $arrPlayerData['equipment']['armor']['img_src'] . '.png';
         $objArmorImg = imagecreatefrompng($strArmorPath);
         $objArmorImg = imgSetAlpha($objArmorImg, $numR, $numG, $numB);
         $objCharacter = imgMergeImages($objCharacter, $objArmorImg);
@@ -527,14 +554,14 @@ function imgCreateCharacter($arrPlayerData, $numR, $numG, $numB)
 
     // Get Helmet OPTIONAL
     if(!empty($arrPlayerData['equipment']['helmet'])) {
-        $strHelmetPath = './assets/img/helmet/' . $arrPlayerData['equipment']['helmet'] . '.png';
+        $strHelmetPath = './assets/img/helmet/' . $arrPlayerData['equipment']['helmet']['img_src'] . '.png';
         $objHelmetImg = imagecreatefrompng($strHelmetPath);
         $objHelmetImg = imgSetAlpha($objHelmetImg, $numR, $numG, $numB);
         $objCharacter = imgMergeImages($objCharacter, $objHelmetImg);
     } else {
         // Get Hair OPTIONAL
         if(!empty($arrPlayerData['equipment']['hair'])) {
-            $strHairPath = './assets/img/hair/' . $arrPlayerData['equipment']['hair'] . '.png';
+            $strHairPath = './assets/img/hair/' . $arrPlayerData['equipment']['hair']['img_src'] . '.png';
             $objHairImg = imagecreatefrompng($strHairPath);
             $objHairImg = imgSetAlpha($objHairImg, $numR, $numG, $numB);
             $objCharacter = imgMergeImages($objCharacter, $objHairImg);
@@ -840,7 +867,7 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
 
     // Get Armor
     if(!empty($arrPlayerData['equipment']['armor'])) {
-        $strArmorPath = './assets/img/armor/' . $arrPlayerData['equipment']['armor'] . '.png';
+        $strArmorPath = './assets/img/armor/' . $arrPlayerData['equipment']['armor']['img_src'] . '.png';
         $objArmorImg = imagecreatefrompng($strArmorPath);
         $objArmorImg = imgCreateFrame($objArmorImg, 7, $numR, $numG, $numB);
         $objArmorImg = imgSetAlpha($objArmorImg, $numR, $numG, $numB);
@@ -849,7 +876,7 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
 
     // Get Helmet
     if(!empty($arrPlayerData['equipment']['helmet'])) {
-        $strHelmetPath = './assets/img/helmet/' . $arrPlayerData['equipment']['helmet'] . '.png';
+        $strHelmetPath = './assets/img/helmet/' . $arrPlayerData['equipment']['helmet']['img_src'] . '.png';
         $objHelmetImg = imagecreatefrompng($strHelmetPath);
         $objHelmetImg = imgCreateFrame($objHelmetImg, 7, $numR, $numG, $numB);
         $objHelmetImg = imgSetAlpha($objHelmetImg, $numR, $numG, $numB);
@@ -858,7 +885,7 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
 
     // Get Hair
     if(!empty($arrPlayerData['equipment']['hair'])) {
-        $strHairPath = './assets/img/hair/' . $arrPlayerData['equipment']['hair'] . '.png';
+        $strHairPath = './assets/img/hair/' . $arrPlayerData['equipment']['hair']['img_src'] . '.png';
         $objHairImg = imagecreatefrompng($strHairPath);
         $objHairImg = imgCreateFrame($objHairImg, 7, $numR, $numG, $numB);
         $objHairImg = imgSetAlpha($objHairImg, $numR, $numG, $numB);
@@ -867,7 +894,7 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
 
     // Get Shield
     if(!empty($arrPlayerData['equipment']['shield'])) {
-        $strShieldPath = './assets/img/shield/' . $arrPlayerData['equipment']['shield'] . '.png';
+        $strShieldPath = './assets/img/shield/' . $arrPlayerData['equipment']['shield']['img_src'] . '.png';
         $objShieldImg = imagecreatefrompng($strShieldPath);
         $objShieldImg = imgCreateFrame($objShieldImg, 7, $numR, $numG, $numB);
         $objShieldImg = imgSetAlpha($objShieldImg, $numR, $numG, $numB);
@@ -876,7 +903,7 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
 
     // Get Weapon
     if(!empty($arrPlayerData['equipment']['weapon'])) {
-        $strWeaponPath = './assets/img/weapon/' . $arrPlayerData['equipment']['weapon'] . '.png';
+        $strWeaponPath = './assets/img/weapon/' . $arrPlayerData['equipment']['weapon']['img_src'] . '.png';
         $objWeaponImg = imagecreatefrompng($strWeaponPath);
         $objWeaponImg = imgCreateFrame($objWeaponImg, 7, $numR, $numG, $numB);
         $objWeaponImg = imgSetAlpha($objWeaponImg, $numR, $numG, $numB);
@@ -887,6 +914,43 @@ function createScreenEquipment($arrPlayerData, $numR, $numG, $numB, $boolIsPlaye
 
     $strImgData = imgResourceToString($objImg);
     return $strImgData;
+}
+
+/**
+ * Generiert den Hintergrund für die Detail Items
+ * @param $strType
+ * @return string
+ */
+function createScreenEquipmentBackground($strType)
+{
+    // Image Background
+    $strBackgroundPath = './assets/img/misc/equip.jpg';
+    $objImg = imagecreatefromjpeg($strBackgroundPath);
+    $objImg = imagecrop($objImg, ['x' => 40, 'y' => 100, 'width' => 259, 'height' => 239]);
+
+    // Add Title
+    imgAddProgressBar($objImg, 10, 0);
+
+    $strTitle = '';
+    if($strType == 'armor') {$strTitle = 'Rüstungen';}
+    if($strType == 'helmet') {$strTitle = 'Helme';}
+    if($strType == 'boots') {$strTitle = 'Stiefel';}
+    if($strType == 'weapon') {$strTitle = 'Waffen';}
+    if($strType == 'shield') {$strTitle = 'Schilde';}
+    if($strType == 'ring') {$strTitle = 'Ringe';}
+    if($strType == 'amulet') {$strTitle = 'Amulette';}
+    if($strType == 'hair') {$strTitle = 'Frisuren';}
+
+    imgAddTitle($objImg, 25, 20, $strTitle, 1);
+
+    $strImgData = imgResourceToString($objImg);
+    return $strImgData;
+}
+
+function createScreenEquipmentDetail($arrPlayerData, $numR, $numG, $numB, $boolIsPlayer)
+{
+    echo "";
+    //getRewardImage
 }
 
 /**
@@ -1282,6 +1346,50 @@ function imgCloneResource($objImg)
 }
 
 /**
+ * Player Inventar Images erstellen
+ * @param $arrPlayerStatus
+ * @param $strType
+ * @param string $strPos
+ * @return string
+ */
+function getPlayerInventory($arrPlayerStatus, $strType, $strPos = '')
+{
+    // Get all the Items
+    $arrInformation = [];
+    foreach($arrPlayerStatus['player']['inventory'][$strType] as $numItem => $arrItem) {
+        $strFile = 'assets/img/' . $strType . '/' . $arrItem['img_src'] . '.png';
+        if(empty($arrPlayerStatus['player']['equipment'][$strType])) {
+            $arrInformation[] = ['img' => $strFile, 'data' => $arrItem['name'], 'item' => $numItem];
+        } else {
+            if($arrPlayerStatus['player']['equipment'][$strType]['id'] != $numItem) {
+                $arrInformation[] = ['img' => $strFile, 'data' => $arrItem['name'], 'item' => $numItem];
+            }
+        }
+    }
+
+    // Generate HTML Output
+    $strHtml = '';
+    foreach($arrInformation as $arrRecord) {
+        $strToolTip = $arrRecord['data'];
+        $strHtml .= '<div style="font-family: arial; margin: 5px; float: left; class="item" data-ot="' . $strToolTip . '">';
+        $strHtml .= '<a href="action.php?action=useequip&item=' . $arrRecord['item'] . '&type=' . $strType . '&pos=' . $strPos . '">';
+        $strHtml .= imgStringToHtmlImg(getRewardImage($arrRecord['img'], $strType, $arrRecord['data'], true));
+        $strHtml .= '</a>';
+        $strHtml .= '</div>';
+    }
+
+    // No Equip
+    $strToolTip = 'Nichts';
+    $strHtml .= '<div style="font-family: arial; margin: 5px; float: left; class="item">';
+    $strHtml .= '<a href="action.php?action=useequip&item=noequip&type=' . $strType . '&pos=' . $strPos . '">';
+    $strHtml .= imgStringToHtmlImg(getRewardImage('', 'noequip', 'noequip', true));
+    $strHtml .= '</a>';
+    $strHtml .= '</div>';
+
+    return $strHtml;
+}
+
+/**
  * Gibt den Item Array zurück der angibt wie viel gewinn mann mit einem Quest machen kann.
  * @param $arrPlayerStatus
  * @param $isPlayer
@@ -1343,14 +1451,22 @@ function getQuestRewards($arrPlayerStatus, $boolIsPlayer)
  * @param $strImagePath
  * @param $strType
  * @param $strData
+ * @param bool $boolInventory
  * @return string
  */
-function getRewardImage($strImagePath, $strType, $strData)
+function getRewardImage($strImagePath, $strType, $strData, $boolInventory = false)
 {
     $arrItem = getItemPositionCorrection($strType);
     $strBackgroundPath = './assets/img/misc/equip.jpg';
     $objImg = imagecreatefromjpeg($strBackgroundPath);
     $objImg = imagecrop($objImg, ['x' => 40, 'y' => 100, 'width' => 71, 'height' => 96]);
+
+    if($boolInventory) {
+        $objColorWhite = imagecolorallocate ($objImg, 255, 255, 255);
+        $objColorGray = imagecolorallocate ($objImg, 88, 88, 88);
+        imagefilledrectangle($objImg , 0, 0, 71, 96, $objColorWhite);
+        imagefilledrectangle($objImg , 2, 2, 69, 94, $objColorGray);
+    }
 
     if($strImagePath != '') {
         $objItem = imagecreatefrompng($strImagePath);
@@ -1372,6 +1488,9 @@ function getRewardImage($strImagePath, $strType, $strData)
             imagettftext($objImg, 16, 0, 5, 60, $objColor, "./assets/font/Gamer.ttf", $numValue);
             $strType = 'EXP';
         }
+        if($strData == 'noequip') {
+            imagettftext($objImg, 16, 0, 5, 60, $objColor, "./assets/font/Gamer.ttf", ' NICHTS');
+        }
 
     }
 
@@ -1379,10 +1498,12 @@ function getRewardImage($strImagePath, $strType, $strData)
     if(!empty($arrItem)) {
         $strType = $arrItem['text'];
     }
-    $objImg = imgAddProgressBar($objImg, 0, 0, 0, 70);
-    $objImg = imgAddTitle($objImg, 15, 5, $strType, 1);
-    $strImage = imgResourceToString($objImg);
+    if(!$boolInventory) {
+        $objImg = imgAddProgressBar($objImg, 0, 0, 0, 70);
+        $objImg = imgAddTitle($objImg, 15, 5, $strType, 1);
+    }
 
+    $strImage = imgResourceToString($objImg);
     return $strImage;
 }
 
@@ -1490,4 +1611,19 @@ function getColorByCode($numColor = 0, $objImg)
             break;
     }
     return $objColor;
+}
+
+/**
+ * Gibt den namen eines Equipments zurück
+ * @param $arrEquip
+ * @param $strType
+ * @param $strNone
+ * @return mixed
+ */
+function getEquip($arrEquip, $strType, $strNone)
+{
+    if(isset($arrEquip['equipment'][$strType]['name'])) {
+        return $arrEquip['equipment'][$strType]['name'];
+    }
+    return $strNone;
 }

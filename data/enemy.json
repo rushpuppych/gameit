@@ -6,7 +6,87 @@
 	},
 	{
 		"id": "002",
-		"name": "Chuttulu",
+		"name": "Cthulhu",
 		"file_src": "chuttulu"
+	},
+	{
+		"id": "003",
+		"name": "Hollow Man",
+		"file_src": "hollow_man"
+	},
+	{
+		"id": "004",
+		"name": "Ice Devil",
+		"file_src": "ice_devil"
+	},
+	{
+		"id": "005",
+		"name": "Mr. Magmar",
+		"file_src": "lava_man"
+	},
+	{
+		"id": "006",
+		"name": "Cat Priest",
+		"file_src": "ninja_cat_priest"
+	},
+	{
+		"id": "007",
+		"name": "Cat Warrior",
+		"file_src": "ninja_cat_warrior"
+	},
+	{
+		"id": "008",
+		"name": "Ork King",
+		"file_src": "orc_king"
+	},
+	{
+		"id": "009",
+		"name": "Ork King",
+		"file_src": "orc_king"
+	},
+	{
+		"id": "010",
+		"name": "Ork Peon",
+		"file_src": "orc_peon"
+	},
+	{
+		"id": "011",
+		"name": "Ork Solider",
+		"file_src": "orc_solider"
+	},
+	{
+		"id": "012",
+		"name": "Ork Warrior",
+		"file_src": "orc_warior"
+	},
+	{
+		"id": "013",
+		"name": "Red Assasine",
+		"file_src": "red_cult_assasine"
+	},
+	{
+		"id": "014",
+		"name": "Red Demon",
+		"file_src": "red_cult_demon"
+	},
+	{
+		"id": "015",
+		"name": "Red Vampire",
+		"file_src": "red_cult_vampire"
+	},
+	{
+		"id": "016",
+		"name": "Skeleton",
+		"file_src": "skeleton"
+	},
+	{
+		"id": "016",
+		"name": "Skeletor",
+		"file_src": "skeletor"
+	},
+	{
+		"id": "016",
+		"name": "Final Vivi",
+		"file_src": "vivi"
 	}
 ]

@@ -1,0 +1,29 @@
+<h1>Players</h1>
+<p>Generate a new Player</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <form action="?" method="get" enctype="text/plain" >
+            <input type="hidden" name="page" value="php/players.php">
+            <div class="form-group">
+                <label for="player_name">Player Name</label>
+                <input type="text" class="form-control" name="player_name" id="player_name" placeholder="Player Name">
+            </div>
+            <div class="form-group">
+                <label for="player_pwd">Password</label>
+                <input type="password" class="form-control" name="player_pwd" id="player_pwd" placeholder="Plaintext Password">
+            </div>
+            <div class="form-group">
+                <label for="player_exp">Start Exp</label>
+                <input type="number" class="form-control" name="player_exp" id="player_exp" placeholder="Start Exp normaly 0">
+            </div>
+            <div class="form-group">
+                <label for="player_exp">Start Gold</label>
+                <input type="number" class="form-control" name="player_gold" id="player_gold" placeholder="Start Gold normaly 0">
+            </div>
+            <button type="submit" class="btn btn-success">Generate Player</button>
+        </form>
+    </div>
+</div>
+
+

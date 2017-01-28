@@ -46,8 +46,13 @@ foreach($arrData as $numPlayer => $arrRecord) {
 }
 
 // Save Player Data
-$strData = json_encode($arrData);
-$strData = file_put_contents("./data/player.json", $strData);
+$strDataSave = json_encode($arrData);
+if($strDataSave != false) {
+    $boolSave = file_put_contents("./data/player.json", $strDataSave);
+    if(!$boolSave) {
+        file_put_contents("./data/player.json", $strData);
+    }
+}
 
 
 // Redirect

@@ -127,7 +127,9 @@ if($strScreen == 'fight' && $strShowPlayer == $strLoginPlayer) {
     $arrFight = $arrPlayerStatus['player_quest']['fight'];
     echo imgStringToHtmlImg(createScreenFight($arrFight, $arrConfig, $arrPlayerStatus['status'], $arrPlayerStatus['player_quest']), 'style="margin-top:-2px;"') . '<br>&nbsp;';
     if($arrFight['progress'] > 0 && $arrPlayerStatus['player_quest']['progress'] == 100) {
+        echo '<a href="action.php?action=quitquest&quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '">';
         echo imgStringToHtmlImg(createBtn('Quit', '1', false), 'style="position: absolute; top: 274px; left: 280px;"');
+        echo '</a>';
         echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 274px; left: 378px;">';
         echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
         echo '</a>';
@@ -141,9 +143,11 @@ if($strScreen == 'fight' && $strShowPlayer == $strLoginPlayer) {
         echo getQuestRewards($arrPlayerStatus, false);
         echo '</div>';
     } else {
-        echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 174px; left: 330px;">';
-        echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
-        echo '</a>';
+        if($arrPlayerStatus['player_quest']['status'] == 'fight' || $arrPlayerStatus['player_quest']['status'] == 'running') {
+            echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 174px; left: 330px;">';
+            echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
+            echo '</a>';
+        }
     }
 
 }
@@ -155,7 +159,43 @@ if($strScreen == 'shop' && $strShowPlayer == $strLoginPlayer) {
 
 // Equip Screen
 if($strScreen == 'equip') {
-    echo imgStringToHtmlImg(createScreenEquipment($arrPlayerData, $numR, $numG, $numB, true), 'style="margin-top:-2px;"') . '<br>&nbsp;';
+    $strInventoryScreen = getParam('inventory', 'all');
+
+    if($strInventoryScreen == 'all') {
+        // Show All Inventory
+        echo imgStringToHtmlImg(createScreenEquipment($arrPlayerData, $numR, $numG, $numB, true), 'style="margin-top:-2px;"') . '<br>&nbsp;';
+
+        // Links
+        $strToolTip = 'Nichts ausgerüstet';
+        if($strShowPlayer == $strLoginPlayer) {
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'hair', $strToolTip) . '" style="position: absolute; top: 91px; left: 304px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=hair"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'helmet', $strToolTip) . '" style="position: absolute; top: 91px; left: 368px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=helmet"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'amulet', $strToolTip) . '" style="position: absolute; top: 91px; left: 433px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=amulet"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'weapon', $strToolTip) . '" style="position: absolute; top: 156px; left: 288px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=weapon"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'armor', $strToolTip) . '" style="position: absolute; top: 156px; left: 368px; width:54px; height: 76px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=armor"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'shield', $strToolTip) . '" style="position: absolute; top: 156px; left: 447px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=shield"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'ring_right', $strToolTip) . '" style="position: absolute; top: 220px; left: 447px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=ring&pos=right"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'ring_left', $strToolTip) . '" style="position: absolute; top: 220px; left: 288px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=ring&pos=left"></a>';
+            echo '<a data-ot="' . getEquip($arrPlayerData, 'boots', $strToolTip) . '" style="position: absolute; top: 240px; left: 368px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=boots"></a>';
+        } else {
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'hair', $strToolTip) . '" style="position: absolute; top: 91px; left: 304px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'helmet', $strToolTip) . '" style="position: absolute; top: 91px; left: 368px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'amulet', $strToolTip) . '" style="position: absolute; top: 91px; left: 433px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'weapon', $strToolTip) . '" style="position: absolute; top: 156px; left: 288px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'armor', $strToolTip) . '" style="position: absolute; top: 156px; left: 368px; width:54px; height: 76px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'shield', $strToolTip) . '" style="position: absolute; top: 156px; left: 447px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'ring_right', $strToolTip) . '" style="position: absolute; top: 220px; left: 447px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'ring_left', $strToolTip) . '" style="position: absolute; top: 220px; left: 288px; width:54px; height: 54px;"></span>';
+            echo '<span data-ot="' . getEquip($arrPlayerData, 'boots', $strToolTip) . '" style="position: absolute; top: 240px; left: 368px; width:54px; height: 54px;"></span>';
+        }
+    } else {
+        // Show One Inventory Categorie
+        $strPos = getParam('pos', '');
+        echo imgStringToHtmlImg(createScreenEquipmentBackground($strInventoryScreen), 'style="margin-top:-2px;"') . '<br>&nbsp;';
+        echo '<div style="position: absolute; top: 106px; left: 278px; width:251px; height: 204px; overflow: auto;">';
+        echo getPlayerInventory($arrPlayerStatus, $strInventoryScreen, $strPos);
+        echo '</div>';
+    }
 }
 
 echo "</span>";
