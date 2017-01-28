@@ -82,7 +82,7 @@ if($strQuest != '') {
 
     // Check Quest Status
     $strQuestPlayer = isQuestRunning(getPlayerData(), $strQuest);
-    if($strQuestPlayer > 0) {
+    if(strlen($strQuestPlayer) > 0) {
         // Quest in Work by Player
         $arrScreenArray[0][0] = createQuestInformation($strQuest, $strQuestPlayer);
     } else {
