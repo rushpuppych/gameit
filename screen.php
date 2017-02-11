@@ -5,6 +5,11 @@ include_once("assets/lib/GifCreator.php");
 include_once("assets/lib/global_functions.php");
 include_once("interface/jenkins_import.php");
 
+// Debugger
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Cookie Informationen auslesen
 $strLoginPlayer = getCookie('player', 'anonym');
 
@@ -124,9 +129,15 @@ if($strScreen == 'stats') {
 
 // Fight Screen
 if($strScreen == 'fight' && $strShowPlayer == $strLoginPlayer) {
-    $arrFight = $arrPlayerStatus['player_quest']['fight'];
+    if(isset($arrPlayerStatus['player_quest']['fight'])) {
+        $arrFight = $arrPlayerStatus['player_quest']['fight'];
+    } else {
+        $arrFight['progress'] = 0;
+    }
     echo imgStringToHtmlImg(createScreenFight($arrFight, $arrConfig, $arrPlayerStatus['status'], $arrPlayerStatus['player_quest']), 'style="margin-top:-2px;"') . '<br>&nbsp;';
-    if($arrFight['progress'] > 0 && $arrPlayerStatus['player_quest']['progress'] == 100) {
+
+
+    if ($arrFight['progress'] > 0 && $arrPlayerStatus['player_quest']['progress'] == 100) {
         echo '<a href="action.php?action=quitquest&quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '">';
         echo imgStringToHtmlImg(createBtn('Quit', '1', false), 'style="position: absolute; top: 274px; left: 280px;"');
         echo '</a>';
@@ -143,10 +154,12 @@ if($strScreen == 'fight' && $strShowPlayer == $strLoginPlayer) {
         echo getQuestRewards($arrPlayerStatus, false);
         echo '</div>';
     } else {
-        if($arrPlayerStatus['player_quest']['status'] == 'fight' || $arrPlayerStatus['player_quest']['status'] == 'running') {
-            echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 174px; left: 330px;">';
-            echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
-            echo '</a>';
+        if(isset($arrPlayerStatus['player_quest']['status'])) {
+            if ($arrPlayerStatus['player_quest']['status'] == 'fight' || $arrPlayerStatus['player_quest']['status'] == 'running') {
+                echo '<a target="_blank" href="print.php?quest=' . $arrPlayerStatus['player_quest']['quest_id'] . '" style="position: absolute; top: 174px; left: 330px;">';
+                echo imgStringToHtmlImg(createBtn('Show Repport', '4', false));
+                echo '</a>';
+            }
         }
     }
 
@@ -166,7 +179,7 @@ if($strScreen == 'equip') {
         echo imgStringToHtmlImg(createScreenEquipment($arrPlayerData, $numR, $numG, $numB, true), 'style="margin-top:-2px;"') . '<br>&nbsp;';
 
         // Links
-        $strToolTip = 'Nichts ausgerüstet';
+        $strToolTip = 'Nothing Equiped';
         if($strShowPlayer == $strLoginPlayer) {
             echo '<a data-ot="' . getEquip($arrPlayerData, 'hair', $strToolTip) . '" style="position: absolute; top: 91px; left: 304px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=hair"></a>';
             echo '<a data-ot="' . getEquip($arrPlayerData, 'helmet', $strToolTip) . '" style="position: absolute; top: 91px; left: 368px; width:54px; height: 54px;" href="screen.php?src=int&img=equip&player=' . $strLoginPlayer . '&inventory=helmet"></a>';

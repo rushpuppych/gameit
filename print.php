@@ -6,6 +6,11 @@ include_once("assets/lib/fpdf/fpdf.php");
 include_once("assets/lib/fpdf/rapport_print.php");
 include_once("interface/jenkins_import.php");
 
+// Debugger
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Get Quest To Print
 $strQuestId = getParam('quest', '');
 

@@ -9,6 +9,11 @@ include_once("assets/lib/GifCreator.php");
 include_once("assets/lib/global_functions.php");
 include_once("interface/jenkins_import.php");
 
+// Debugger
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Cookie Informationen auslesen
 $strLoginPlayer = getCookie('player', 'anonym');
 
@@ -34,7 +39,7 @@ $arrPlayerStatus = questImportData($arrPlayerStatus);
 $arrPlayerData = $arrPlayerStatus['player'];
 
 // Char is Idle in City
-if($arrPlayerStatus['status'] == "idle") {
+if($arrPlayerStatus['status'] == "idle" && $strQuest == '') {
     // Player Screen Laden
     if($strImgCoords == '0-0') {$arrScreenArray[0][0] = createPlayerTitle($arrPlayerData, $arrConfig);}
     if($strImgCoords == '1-0') {$arrScreenArray[1][0] = createScreenCharacter($arrPlayerData, '001', $numR, $numG, $numB);}
@@ -65,7 +70,7 @@ if($arrPlayerStatus['status'] == "fight") {
     if($strImgCoords == '2-0') {$arrScreenArray[2][0] = createPlayerMinimalStats($arrPlayerData, $arrConfig);}
 }
 
-if($arrPlayerStatus['status'] == "idle") {
+if($arrPlayerStatus['status'] == "idle" && $strQuest == '') {
     // Player Screen Laden
     if($strImgCoords == '0-0') {$arrScreenArray[0][0] = createPlayerTitle($arrPlayerData, $arrConfig);}
     if($strImgCoords == '1-0') {$arrScreenArray[1][0] = createScreenCharacter($arrPlayerData, '001', $numR, $numG, $numB);}

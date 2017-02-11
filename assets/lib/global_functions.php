@@ -612,8 +612,13 @@ function createScreenCharacter($arrPlayerData, $strBackground, $numR, $numG, $nu
 
     // Add Progress and title to Background
     if($strTitle != '') {
-        $arrTitle = explode(' ',$strTitle);
-        if($arrTitle < 4) {
+        $arrTitle = explode(' ', $strTitle);
+        $numCount = count($arrTitle) - 1;
+        if(empty($arrTitle[$numCount])) {
+            unset($arrTitle[$numCount]);
+        }
+
+        if(count($arrTitle) < 4) {
             $objBackground = imgAddProgressBar($objBackground, 160, $numProgress);
             $objBackground = imgAddTitle($objBackground, 174, 17, $strTitle, $numColor);
         } else {
